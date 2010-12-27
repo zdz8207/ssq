@@ -12,20 +12,22 @@ public class RandomUtil {
 		//最小数
 		int min = 75;
 		//一次获取的次数
-		int number = 10;
+		int number = 5;
+		System.out.println("\n===================================");
 		//要出的号码
 		String red = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33";
-		
+		//String red = "01 03 04 06 08 09 11 12 13 16 18 19 22 23 26 29 32 33";
 		System.out.println("red==" + red);
 		//要出的篮球号码
 		String blue = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16";
+		//String blue = "04 07 13";
 		
 		System.out.println("blue==" + blue);
 		//上期号码
-		String pre = "1,3,7,12,18,23,27";
+		String pre = "02 13 14 17 19 26 14";
 		
 		System.out.println("pre==" + pre);
-		System.out.println("===========================\n");
+		System.out.println("===================================\n");
 		
 		//red,blue,pre,min,max,number
 		Map map = new HashMap();
