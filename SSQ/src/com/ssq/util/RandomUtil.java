@@ -24,7 +24,7 @@ public class RandomUtil {
 		
 		System.out.println("blue==" + blue);
 		//上期号码
-		String pre = "02 13 14 17 19 26 14";
+		String pre = "04 09 17 21 25 31 01";
 		
 		System.out.println("pre==" + pre);
 		System.out.println("===================================\n");
