@@ -150,7 +150,7 @@ public class RandomUtil {
 		if(Integer.parseInt(b1)%2 == 1){
 			qicount ++;
 		}
-		if(qicount <= 2 || qicount >= 4){
+		if(qicount < 2 || qicount > 4){
 			return getNumber(redmap,bluemap,prelist,min,max);
 		}
 		
@@ -158,7 +158,7 @@ public class RandomUtil {
 		if(Integer.parseInt(b1)%10 < 5){
 			xwcount ++;
 		}
-		if(xwcount <= 2 || xwcount >= 4){
+		if(xwcount < 2 || xwcount > 4){
 			return getNumber(redmap,bluemap,prelist,min,max);
 		}
 		
