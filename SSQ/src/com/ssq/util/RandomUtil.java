@@ -115,6 +115,7 @@ public class RandomUtil {
 		int li = 0;
 		int licount = 0;//连号统计
 		int qicount = 0;//奇偶统计
+		int xwcount = 0;//小尾数统计 
 		List<Integer> list = new ArrayList<Integer>();
 		//过滤连号，1～2组连号，3连号属于2组连号
 		for (Map.Entry<String,String> m : redmap2.entrySet()) {			  
@@ -133,6 +134,10 @@ public class RandomUtil {
 			if(rli%2 == 1){
 				qicount ++;
 			}
+			//0-5 为小尾数
+			if(rli%10 < 5){
+				xwcount ++;
+			}
 			
 			list.add(rli);
 		}
@@ -146,6 +151,14 @@ public class RandomUtil {
 			qicount ++;
 		}
 		if(qicount < 2 || qicount > 4){
+			return getNumber(redmap,bluemap,prelist,min,max);
+		}
+		
+		//每期小尾数 2-4个
+		if(Integer.parseInt(b1)%10 < 5){
+			xwcount ++;
+		}
+		if(xwcount < 2 || xwcount > 4){
 			return getNumber(redmap,bluemap,prelist,min,max);
 		}
 		
