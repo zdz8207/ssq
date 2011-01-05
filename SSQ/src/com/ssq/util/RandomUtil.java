@@ -23,17 +23,22 @@ public class RandomUtil {
 		//String blue = "04 07 13";
 		
 		System.out.println("blue==" + blue);
-		//上期号码
-		String pre = "04 09 17 21 25 31 01";
-		
+		//上期号码 采集网址：http://www.2caipiao.com/ssq/index.jhtml
+		String pre = "06 08 12 17 28 33 05";
 		System.out.println("pre==" + pre);
+		
+		//遗漏值 5-10 的号码 一般必须有一个
+		//采集网址：http://zst.2caipiao.com/ssqZst!ssqjbzs.jhtml?flag=jbzs
+		String yilou = "7,15,16,18,22,23,27,29";
+		System.out.println("yilou==" + yilou);
 		System.out.println("===================================\n");
 		
-		//red,blue,pre,min,max,number
+		//red,blue,pre,yilou,min,max,number
 		Map map = new HashMap();
 		map.put("red", red);
 		map.put("blue", blue);
 		map.put("pre", pre);
+		map.put("yilou", yilou);
 		map.put("min", min);
 		map.put("max", max);
 		map.put("number", number);
@@ -69,13 +74,17 @@ public class RandomUtil {
 		List<Integer> prelist = StringToList(pre);
 //		Map<String,String> premap = StringToMap(pre);
 		
+		String yilou = (String)map.get("pre");
+		yilou = yilou.replaceAll(" ", ",").replaceAll("0([^,])", "$1");
+		List<Integer> yiloulist = StringToList(yilou);
+		
 		int min = (Integer)map.get("min");
 		int max = (Integer)map.get("max");
 		int number = (Integer)map.get("number");
 		int blueNumber = bluemap.size();
 		
 		for(int i=1; i<=blueNumber; i++){
-			String sn = getNumber(redmap,bluemap,prelist,min,max);
+			String sn = getNumber(redmap,bluemap,prelist,yiloulist,min,max);
 			String blue2 = sn.split("蓝球:")[1].split(" 和值")[0];
 			bluemap.remove(blue2);
 			outCount ++;
@@ -107,8 +116,8 @@ public class RandomUtil {
 	 * @param min 最小数
 	 * @return
 	 */
-	public static String getNumber(Map<String,String> redmap,Map<String,String> bluemap,List<Integer> prelist,int max,int min){
-		Map<String,String> redmap2 = getRedRandomNumber(redmap,min,max);
+	public static String getNumber(Map<String,String> redmap,Map<String,String> bluemap,List<Integer> prelist,List<Integer> yiloulist,int max,int min){
+		Map<String,String> redmap2 = getRedRandomNumber(redmap,yiloulist,min,max);
 		String b1 = getBuleRandomNumber(bluemap);
 		
 		int total = 0;
@@ -143,7 +152,7 @@ public class RandomUtil {
 		}
 
 		if(licount > 2 || licount == 0){
-			return getNumber(redmap,bluemap,prelist,min,max);
+			return getNumber(redmap,bluemap,prelist,yiloulist,min,max);
 		}
 		
 		//2~4个奇数
@@ -151,7 +160,7 @@ public class RandomUtil {
 			qicount ++;
 		}
 		if(qicount < 2 || qicount > 4){
-			return getNumber(redmap,bluemap,prelist,min,max);
+			return getNumber(redmap,bluemap,prelist,yiloulist,min,max);
 		}
 		
 		//每期小尾数 2-4个
@@ -159,7 +168,7 @@ public class RandomUtil {
 			xwcount ++;
 		}
 		if(xwcount < 2 || xwcount > 4){
-			return getNumber(redmap,bluemap,prelist,min,max);
+			return getNumber(redmap,bluemap,prelist,yiloulist,min,max);
 		}
 		
 		//添加蓝球号码
@@ -189,13 +198,13 @@ public class RandomUtil {
 
 		//如果没有包含上期一个号码 或包含两个以上则重新算
 		if(count == 0 || count > 2){
-			return getNumber(redmap,bluemap,prelist,min,max);
+			return getNumber(redmap,bluemap,prelist,yiloulist,min,max);
 		}
 		
 		//每期尾号必须有一个重复
 		int escount = 7-weihaomap.size();
 		if(escount < 1 || escount > 3){
-			return getNumber(redmap,bluemap,prelist,min,max);
+			return getNumber(redmap,bluemap,prelist,yiloulist,min,max);
 		}
 		
 		return CommonUtil.sortMap(redmap2) + " 蓝球:" + b1 + " 和值:" + total;
@@ -206,7 +215,7 @@ public class RandomUtil {
 	 * @param str
 	 * @return
 	 */
-	public static Map<String,String> getRedRandomNumber(Map<String,String> map,int max,int min) {
+	public static Map<String,String> getRedRandomNumber(Map<String,String> map,List<Integer> yiloulist,int max,int min) {
 		//红球为1~33 选6
 		int number = 6;
 		int extent = 34;//random是小于1的小数，所以基数要大于最大数1
@@ -238,7 +247,17 @@ public class RandomUtil {
 		//如果和值不在76-135范围内则重新算
 		// || map2.size() != 6
 		if(total<=min || total>=max){
-			return getRedRandomNumber(map,min,max);
+			return getRedRandomNumber(map,yiloulist,min,max);
+		}
+		//每期遗漏值 5-10 的号码 一般必须有一个
+		int yiloucount = 0;
+		for(int i=0; i<yiloulist.size(); i++){
+			if(map2.containsKey(yiloulist.get(i) +"")){
+				yiloucount ++;
+			}
+		}
+		if(yiloucount < 1 || yiloucount > 2){
+			return getRedRandomNumber(map,yiloulist,min,max);
 		}
 		return map2;
 	}
